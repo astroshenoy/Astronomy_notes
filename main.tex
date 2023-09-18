@@ -1,0 +1,167 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  My documentation report
+%  Objetive: Explain what I did and how, so someone can continue with the investigation
+%
+% Important note:
+% Chapter heading images should have a 2:1 width:height ratio,
+% e.g. 920px width and 460px height.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[6pt,oneside]{book} % Default font size and left-justified equations
+\DeclareUnicodeCharacter{2212}{-}
+\DeclareUnicodeCharacter{2217}{\odot}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    pdftitle={Overleaf Example},
+    pdfpagemode=FullScreen,
+    }
+
+\usepackage{amsmath}
+\usepackage[utf8]{inputenc}
+
+\usepackage{natbib} % Bibliography 
+\setcitestyle{authoryear,open={(},close={)}}
+
+
+\usepackage[top=3cm,bottom=3cm,left=3.2cm,right=3.2cm,headsep=10pt,letterpaper]{geometry} % Page margins
+
+\usepackage{xcolor} % Required for specifying colors by name
+\definecolor{ocre}{RGB}{52,177,201} % Define the orange color used for highlighting throughout the book
+
+% Font Settings
+\usepackage{avant} % Use the Avantgarde font for headings
+%\usepackage{times} % Use the Times font for headings
+\usepackage{mathptmx} % Use the Adobe Times Roman as the default text font together with math symbols from the Sym­bol, Chancery and Com­puter Modern fonts
+\usepackage{microtype} % Slightly tweak font spacing for aesthetics
+\usepackage[utf8]{inputenc} % Required for including letters with accents
+\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
+\usepackage{amsthm}
+
+
+\usepackage{datatool,environ,newfile}
+\NewEnviron{sortEnvironment}[1]{{%
+  \let\par\DTLpar% Cannot include \par in content, so replace \par with \DTLpar
+  \addtostream{sortOutput}{"#1","\BODY"}% Write section content to output file
+}}
+\AtBeginDocument{%
+  \newoutputstream{sortOutput}% New output file
+  \openoutputfile{sortContent.csv}{sortOutput}% Open output file
+}
+\AtEndDocument{%
+  \closeoutputstream{sortOutput}% Close output file
+  \DTLloaddb[
+      noheader,
+      keys={Title,Content}]
+    {sortedSections}{sortContent.csv}% Load stored content
+  \dtlsort{Title}{sortedSections}{\dtlcompare}% Sort stored content
+  \DTLforeach{sortedSections}{\Title=Title,\Content=Content}
+    {\section{\Title} \Content}% Print all content
+}
+
+
+\input{structure} % Insert the commands.tex file which contains the majority of the structure behind the template
+
+%----------------------------------------------------------------------------------------
+%	Definitions of new commands
+%----------------------------------------------------------------------------------------
+
+\def\R{\mathbb{R}}
+\newcommand{\cvx}{convex}
+\begin{document}
+
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\begingroup
+\thispagestyle{empty}
+\AddToShipoutPicture*{\put(0,0){\includegraphics[scale=1.25]{esahubble}}} % Image background
+\centering
+\vspace*{5cm}
+\par\normalfont\fontsize{35}{35}\sffamily\selectfont
+\textbf{Astronomy notes}\\
+{\LARGE Extragalactic Astrophysics}\par % Book title
+\vspace*{1cm}
+{\Large Shravya Shenoy}\par % Author name
+\endgroup
+
+%----------------------------------------------------------------------------------------
+%	COPYRIGHT PAGE
+%----------------------------------------------------------------------------------------
+
+\newpage
+~\vfill
+\thispagestyle{empty}
+
+%\noindent Copyright \copyright\ 2014 Andrea Hidalgo\\ % Copyright notice
+
+\noindent \textsc{PhD Astronomy study notes}\\
+
+%\noindent \textsc{github.com/LaurethTeX/Clustering}\\ % URL
+
+\noindent This document is where I maintain my astronomy notes from different lectures and academic papers.\\ % License information
+
+\noindent \textit{Last updated \today} % Printing/edition date
+
+%----------------------------------------------------------------------------------------
+%	TABLE OF CONTENTS
+%----------------------------------------------------------------------------------------
+
+\chapterimage{head1.png} % Table of contents heading image
+
+\pagestyle{empty} % No headers
+
+\tableofcontents % Print the table of contents itself
+
+%\cleardoublepage % Forces the first chapter to start on an odd page so it's on the right
+
+\pagestyle{fancy} % Print headers again
+
+%----------------------------------------------------------------------------------------
+%	CHAPTER 1
+%----------------------------------------------------------------------------------------
+
+%\include{Chapters/Terms.tex}
+\include{Chapters/AGN_&_Quasars.tex}
+%\include{Chapters/Asteroids.tex}
+%\include{Chapters/Auroras.tex}
+%\include{Chapters/BigBangTheory.tex}
+\include{Chapters/Blackholes.tex}
+%\include{Chapters/ColdGas.tex}
+%\include{Chapters/Comets.tex}
+%\include{Chapters/DwarfGalaxies.tex}
+\include{Chapters/Extragalactic.tex}
+\include{Chapters/Galaxies.tex}
+\include{Chapters/GlobularClusters.tex}
+%\include{Chapters/GravitationalLensing.tex}
+\include{Chapters/Mergers}
+%\include{Chapters/Planets.tex}
+\include{Chapters/Stars_and_Supernovae.tex}
+\include{Chapters/Starformation}
+%\include{Chapters/Spectroscopy.tex}
+%\include{Chapters/Surveys.tex}
+%\include{Chapters/Telescopes.tex}
+
+
+
+\addcontentsline{toc}{chapter}{\textbf{Bibliography}} 
+\begingroup
+\renewcommand\thechapter{}
+\titleformat{\chapter}[display]
+{\normalfont\huge\bfseries}{}{20pt}{\Huge}
+\bibliographystyle{aasjournal}
+\bibliographystyle{aasjournal}
+\bibliography{refs}
+\endgroup
+
+\end{document}
